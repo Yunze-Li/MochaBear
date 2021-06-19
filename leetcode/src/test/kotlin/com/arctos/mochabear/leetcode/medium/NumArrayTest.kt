@@ -7,12 +7,9 @@ class NumArrayTest {
 
     @Test
     fun test() {
-        val array = NumArray(intArrayOf(7,2,7,2,0))
-        array.update(4,6)
-        array.update(0,2)
-        array.update(0,9)
-        assertEquals(6, array.sumRange(4,4))
-        array.update(3,8)
-        assertEquals(32, array.sumRange(0,4))
+        val array = NumArray(intArrayOf(1,7,3,0,7,8,3,2,6,2,1,1,4,5))
+        assertEquals(31, array.sumRange(0,7))
+        array.update(4,9)
+        assertEquals(33, array.sumRange(0,7))
     }
 }
