@@ -1,4 +1,3 @@
 rootProject.name = "MochaBear"
 include ':app'
 include ':leetcode'
-include ':leetcode'
