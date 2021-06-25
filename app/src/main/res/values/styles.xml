@@ -13,4 +13,10 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:background">@drawable/rectangle_with_radius</item>
     </style>
+
+    <!-- Google Map Bottom Sheet -->
+    <style name="GoogleMapDemoBottomSheetTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

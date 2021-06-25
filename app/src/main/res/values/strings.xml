@@ -5,5 +5,9 @@
 
     <string name="google_map_demo_name">Google Map Demo</string>
     <string name="google_map_demo_welcome">Welcome to Google Map Demo</string>
+    <string name="google_map_demo_bottom_sheet_title">Please select here:</string>
+    <string name="google_map_bottom_sheet_button_1">Beijing</string>
+    <string name="google_map_bottom_sheet_button_2">Seattle</string>
+    <string name="google_map_bottom_sheet_button_3">Dubai</string>
 
 </resources>

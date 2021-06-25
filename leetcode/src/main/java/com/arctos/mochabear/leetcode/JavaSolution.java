@@ -1,46 +1,50 @@
 package com.arctos.mochabear.leetcode;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class JavaSolution {
-    public int numMatchingSubseq(String s, String[] words) {
-        if (words.length == 0) {
-            return 0;
-        }
+    public int[] findRedundantConnection(int[][] edges) {
 
-        int count = 0;
-        Set<String> isSub = new HashSet<>();
-        Set<String> notSub = new HashSet<>();
-        for (String word : words) {
-            if (isSub.contains(word)) {
-                count += 1;
-                continue;
-            } else if (notSub.contains(word)) {
-                continue;
-            }
-
-            boolean result = isSubseq(s, word);
-            if (result) {
-                count += 1;
-                isSub.add(word);
+        HashMap<Integer, Set<Integer>> edgeMap = new HashMap<>();
+        for (int[] edge : edges) {
+            if (edgeMap.containsKey(edge[0])) {
+                edgeMap.get(edge[0]).add(edge[1]);
             } else {
-                notSub.add(word);
+                Set<Integer> newSet = new HashSet<>();
+                newSet.add(edge[1]);
+                edgeMap.put(edge[0], newSet);
+            }
+            if (edgeMap.containsKey(edge[1])) {
+                edgeMap.get(edge[1]).add(edge[0]);
+            } else {
+                Set<Integer> newSet = new HashSet<>();
+                newSet.add(edge[0]);
+                edgeMap.put(edge[1], newSet);
             }
         }
-        return count;
+
+        boolean needCheck = true;
+        while (needCheck) {
+            for (int key : edgeMap.keySet()) {
+                if (edgeMap.get(key).size() == 1) {
+                    int neighbor = edgeMap.get(key).iterator().next();
+                    edgeMap.get(neighbor).remove(key);
+                    edgeMap.remove(key);
+                    needCheck = true;
+                    break;
+                }
+                needCheck = false;
+            }
+        }
+
+        for (int i = edges.length - 1; i >= 0; i--) {
+            if (edgeMap.containsKey(edges[i][0]) && edgeMap.containsKey(edges[i][1])) {
+                return edges[i];
+            }
+        }
+        return edges[0];
     }
 
-    private boolean isSubseq(String full, String current) {
-        int currentIndex = 0;
-        for (int i = 0; i < full.length(); i++) {
-            if (full.charAt(i) == current.charAt(currentIndex)) {
-                currentIndex++;
-            }
-            if (currentIndex == current.length()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
