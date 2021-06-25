@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MochaBear</string>
+    <string name="main_activity_welcome">Welcome to MochaBear</string>
+
+
+    <string name="google_map_demo_name">Google Map Demo</string>
+    <string name="google_map_demo_welcome">Welcome to Google Map Demo</string>
+
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MainActivityTitle" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DemoActivityTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainActivityDemoButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/rectangle_with_radius</item>
+    </style>
+</resources>
