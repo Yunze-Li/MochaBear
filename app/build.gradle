@@ -40,7 +40,8 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
 
     // Google Maps
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation "com.google.android.gms:play-services-maps:$google_map_version"
+    implementation "com.google.maps.android:android-maps-utils:$google_map_utils_version"
 
     // tests
     testImplementation "junit:junit:$junit_version"
