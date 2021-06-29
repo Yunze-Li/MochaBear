@@ -9,5 +9,6 @@
     <string name="google_map_bottom_sheet_button_1">Beijing</string>
     <string name="google_map_bottom_sheet_button_2">Seattle</string>
     <string name="google_map_bottom_sheet_button_3">Dubai</string>
+    <string name="google_map_bottom_sheet_button_4">故宫</string>
 
 </resources>

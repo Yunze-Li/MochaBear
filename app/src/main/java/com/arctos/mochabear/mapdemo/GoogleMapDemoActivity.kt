@@ -1,5 +1,6 @@
 package com.arctos.mochabear.mapdemo
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,18 +33,26 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         val demoButton1 = findViewById<AppCompatButton>(R.id.location_button_1)
         val demoButton2 = findViewById<AppCompatButton>(R.id.location_button_2)
         val demoButton3 = findViewById<AppCompatButton>(R.id.location_button_3)
+        val demoButton4 = findViewById<AppCompatButton>(R.id.location_button_4)
 
         demoButton1.setOnClickListener {
             val beijingLatLng = LatLng(39.916668, 116.383331)
-            addMarkedAndMoveCamera(beijingLatLng, "This is beijing", "The Capital of China.")
+            addMarkerAndMoveCamera(beijingLatLng, "This is beijing", "The Capital of China.")
         }
         demoButton2.setOnClickListener {
             val seattleLatLng = LatLng(47.608013, -122.335167)
-            addMarkedAndMoveCamera(seattleLatLng, "This is Seattle", "Where Amazon headquarter is.")
+            addMarkerAndMoveCamera(seattleLatLng, "This is Seattle", "Where Amazon headquarter is.")
         }
         demoButton3.setOnClickListener {
             val dubaiLatLng = LatLng(25.276987, 55.296249)
-            addMarkedAndMoveCamera(dubaiLatLng, "This is Dubai", "Currently I stay in here.")
+            addMarkerAndMoveCamera(dubaiLatLng, "This is Dubai", "Currently I stay in here.")
+        }
+        demoButton4.setOnClickListener {
+            val place1 = LatLng(39.920628, 116.395179)
+            val place2 = LatLng(39.919567, 116.399118)
+            val sw = LatLng(39.907935, 116.392183)
+            val ne = LatLng(39.923541, 116.402244)
+            showMultipleMarkersAndMoveCamera(sw, ne, place1, place2, "长春宫", "奉先殿")
         }
 
 
@@ -69,18 +79,12 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         this.googleMap = googleMap
     }
 
-    private fun addMarkedAndMoveCamera(destination: LatLng, title: String, description: String) {
+    private fun addMarkerAndMoveCamera(destination: LatLng, title: String, description: String) {
         val customMarkerView = bindCustomMarkerInfo(title, description)
-        val iconGenerator = IconGenerator(this)
-        iconGenerator.setContentView(customMarkerView)
-        iconGenerator.setBackground(null)
-        val iconBitMap = iconGenerator.makeIcon()
+        val iconBitMap = makeIconBitmap(customMarkerView)
 
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(destination)
-                .icon(BitmapDescriptorFactory.fromBitmap(iconBitMap))
-        )
+        addMarker(destination, iconBitMap)
+
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             override fun getInfoWindow(p0: Marker): View? {
                 // in here it will using the entire info window including frame
@@ -96,11 +100,46 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 12.0f))
     }
 
-    private fun bindCustomMarkerInfo(title: String, description: String): View {
+    private fun showMultipleMarkersAndMoveCamera(
+        sw: LatLng,
+        ne: LatLng,
+        place1: LatLng,
+        place2: LatLng,
+        title1: String,
+        title2: String
+    ) {
+        val markerView1 = bindCustomMarkerInfo(title1, null)
+        val markerView2 = bindCustomMarkerInfo(title2, null)
+        val iconBitMap1 = makeIconBitmap(markerView1)
+        val iconBitMap2 = makeIconBitmap(markerView2)
+
+        addMarker(place1, iconBitMap1)
+        addMarker(place2, iconBitMap2)
+
+        val latLngBounds = LatLngBounds(sw, ne)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 30))
+    }
+
+    private fun bindCustomMarkerInfo(title: String, description: String?): View {
         val customMarkerView = layoutInflater.inflate(R.layout.google_map_custom_marker, null)
         customMarkerView.findViewById<TextView>(R.id.custom_marker_title)?.apply { text = title }
         customMarkerView.findViewById<TextView>(R.id.customer_marker_description)
-            ?.apply { text = description }
+            ?.apply { description?.let { text = it } }
         return customMarkerView
+    }
+
+    private fun makeIconBitmap(markerView: View): Bitmap {
+        val iconGenerator = IconGenerator(this)
+        iconGenerator.setContentView(markerView)
+        iconGenerator.setBackground(null)
+        return iconGenerator.makeIcon()
+    }
+
+    private fun addMarker(location: LatLng, icon: Bitmap) {
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(location)
+                .icon(BitmapDescriptorFactory.fromBitmap(icon))
+        )
     }
 }
