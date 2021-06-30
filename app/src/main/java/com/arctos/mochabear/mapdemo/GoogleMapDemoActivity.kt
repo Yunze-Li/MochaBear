@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.SphericalUtil
 import com.google.maps.android.ui.IconGenerator
 
 class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -36,25 +37,38 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         val demoButton4 = findViewById<AppCompatButton>(R.id.location_button_4)
 
         demoButton1.setOnClickListener {
-            val beijingLatLng = LatLng(39.916668, 116.383331)
-            addMarkerAndMoveCamera(beijingLatLng, "This is beijing", "The Capital of China.")
+            val beijingMarker = MapMarker(
+                LatLng(39.916668, 116.383331),
+                "This is Beijing",
+                "The capital of China, where I live."
+            )
+            showMarkerOnMap(beijingMarker)
+            moveCameraToMarker(beijingMarker)
         }
         demoButton2.setOnClickListener {
-            val seattleLatLng = LatLng(47.608013, -122.335167)
-            addMarkerAndMoveCamera(seattleLatLng, "This is Seattle", "Where Amazon headquarter is.")
+            val seattleMarker = MapMarker(
+                LatLng(47.608013, -122.335167),
+                "This is Seattle",
+                "Where Amazon headquarter is."
+            )
+            showMarkerOnMap(seattleMarker)
+            moveCameraToMarker(seattleMarker)
         }
         demoButton3.setOnClickListener {
-            val dubaiLatLng = LatLng(25.276987, 55.296249)
-            addMarkerAndMoveCamera(dubaiLatLng, "This is Dubai", "Currently I stay in here.")
+            val dubaiMarker = MapMarker(
+                LatLng(25.276987, 55.296249),
+                "This is Dubai",
+                "Currently I stay in here."
+            )
+            showMarkerOnMap(dubaiMarker)
+            moveCameraToMarker(dubaiMarker)
         }
         demoButton4.setOnClickListener {
-            val place1 = LatLng(39.920628, 116.395179)
-            val place2 = LatLng(39.919567, 116.399118)
-            val sw = LatLng(39.907935, 116.392183)
-            val ne = LatLng(39.923541, 116.402244)
-            showMultipleMarkersAndMoveCamera(sw, ne, place1, place2, "长春宫", "奉先殿")
+            val place1 = MapMarker(LatLng(39.920628, 116.395179), "长春宫")
+            val place2 = MapMarker(LatLng(39.919567, 116.399118), "奉先殿")
+            val place3 = MapMarker(LatLng(39.913762, 116.397145), "午门", "斩首的地方")
+            showMultipleMarkersAndMoveCamera(listOf(place1, place2, place3))
         }
-
 
         val bottomSheet = findViewById<ConstraintLayout>(R.id.google_map_bottom_sheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -79,11 +93,12 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         this.googleMap = googleMap
     }
 
-    private fun addMarkerAndMoveCamera(destination: LatLng, title: String, description: String) {
-        val customMarkerView = bindCustomMarkerInfo(title, description)
-        val iconBitMap = makeIconBitmap(customMarkerView)
-
-        addMarker(destination, iconBitMap)
+    private fun showMarkerOnMap(marker: MapMarker) {
+        marker.title?.let {
+            val customMarkerView = bindCustomMarkerInfo(marker.title, marker.description)
+            val iconBitMap = makeIconBitmap(customMarkerView)
+            addMarker(marker.location, iconBitMap)
+        }
 
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             override fun getInfoWindow(p0: Marker): View? {
@@ -97,27 +112,28 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
         })
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination, 12.0f))
     }
 
-    private fun showMultipleMarkersAndMoveCamera(
-        sw: LatLng,
-        ne: LatLng,
-        place1: LatLng,
-        place2: LatLng,
-        title1: String,
-        title2: String
-    ) {
-        val markerView1 = bindCustomMarkerInfo(title1, null)
-        val markerView2 = bindCustomMarkerInfo(title2, null)
-        val iconBitMap1 = makeIconBitmap(markerView1)
-        val iconBitMap2 = makeIconBitmap(markerView2)
+    private fun moveCameraToMarker(marker: MapMarker, zoomLevel: Float = 12.0f) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.location, zoomLevel))
+    }
 
-        addMarker(place1, iconBitMap1)
-        addMarker(place2, iconBitMap2)
-
-        val latLngBounds = LatLngBounds(sw, ne)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 30))
+    private fun showMultipleMarkersAndMoveCamera(markers: List<MapMarker>) {
+        val builder = LatLngBounds.Builder()
+        for (marker in markers) {
+            showMarkerOnMap(marker)
+            val markerNorthEastBorder = marker.location.let {
+                SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_NORTH)
+                SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_EAST)
+            }
+            val markerSouthWestBorder = marker.location.let {
+                SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_SOUTH)
+                SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_WEST)
+            }
+            builder.include(markerNorthEastBorder)
+            builder.include(markerSouthWestBorder)
+        }
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0))
     }
 
     private fun bindCustomMarkerInfo(title: String, description: String?): View {
@@ -139,7 +155,16 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.addMarker(
             MarkerOptions()
                 .position(location)
+                .anchor(0.0f, 1.0f)
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         )
+    }
+
+    companion object {
+        private const val MARKER_OFFSET_IN_METERS = 500.0
+        private const val HEADING_NORTH = 0.0
+        private const val HEADING_EAST = 90.0
+        private const val HEADING_SOUTH = 180.0
+        private const val HEADING_WEST = 270.0
     }
 }
