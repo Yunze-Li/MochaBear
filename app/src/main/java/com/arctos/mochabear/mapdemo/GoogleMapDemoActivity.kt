@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import com.google.maps.android.ui.IconGenerator
 
+
 class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -101,9 +102,15 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
-            override fun getInfoWindow(p0: Marker): View? {
+            override fun getInfoWindow(p0: Marker): View {
                 // in here it will using the entire info window including frame
-                return null
+                val view: View = layoutInflater.inflate(R.layout.google_map_custom_infowindow, null)
+                val titleView = view.findViewById<View>(R.id.infowindow_title) as TextView
+                val descriptionView =
+                    view.findViewById<View>(R.id.infowindow_description) as TextView
+                titleView.text = marker.title
+                descriptionView.text = marker.description
+                return view
             }
 
             override fun getInfoContents(p0: Marker): View? {
