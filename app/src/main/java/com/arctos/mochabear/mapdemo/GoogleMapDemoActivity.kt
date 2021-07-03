@@ -3,11 +3,15 @@ package com.arctos.mochabear.mapdemo
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.arctos.mochabear.R
+import com.arctos.mochabear.mapdemo.model.CustomInfoWindowMarker
+import com.arctos.mochabear.mapdemo.model.CustomLayoutMarker
+import com.arctos.mochabear.mapdemo.model.MapMarker
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,6 +31,8 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var googleMap: GoogleMap
 
+    private val markerSet = mutableSetOf<Marker>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,36 +44,36 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         val demoButton4 = findViewById<AppCompatButton>(R.id.location_button_4)
 
         demoButton1.setOnClickListener {
-            val beijingMarker = MapMarker(
+            val beijingMarker = CustomLayoutMarker(
                 LatLng(39.916668, 116.383331),
                 "This is Beijing",
-                "The capital of China, where I live."
+                "The capital of China."
             )
-            showMarkerOnMap(beijingMarker)
+            showCustomLayoutMarkerOnMap(beijingMarker)
             moveCameraToMarker(beijingMarker)
         }
         demoButton2.setOnClickListener {
-            val seattleMarker = MapMarker(
+            val seattleMarker = CustomLayoutMarker(
                 LatLng(47.608013, -122.335167),
                 "This is Seattle",
                 "Where Amazon headquarter is."
             )
-            showMarkerOnMap(seattleMarker)
+            showCustomLayoutMarkerOnMap(seattleMarker)
             moveCameraToMarker(seattleMarker)
         }
         demoButton3.setOnClickListener {
-            val dubaiMarker = MapMarker(
+            val dubaiMarker = CustomLayoutMarker(
                 LatLng(25.276987, 55.296249),
                 "This is Dubai",
                 "Currently I stay in here."
             )
-            showMarkerOnMap(dubaiMarker)
+            showCustomLayoutMarkerOnMap(dubaiMarker)
             moveCameraToMarker(dubaiMarker)
         }
         demoButton4.setOnClickListener {
-            val place1 = MapMarker(LatLng(39.920628, 116.395179), "长春宫")
-            val place2 = MapMarker(LatLng(39.919567, 116.399118), "奉先殿")
-            val place3 = MapMarker(LatLng(39.913762, 116.397145), "午门", "斩首的地方")
+            val place1 = CustomInfoWindowMarker(LatLng(39.920628, 116.395179), "长春宫", "也叫永宁宫")
+            val place2 = CustomInfoWindowMarker(LatLng(39.919567, 116.399118), "奉先殿", "祭祀祖先用的家庙")
+            val place3 = CustomInfoWindowMarker(LatLng(39.913762, 116.397145), "午门", "推出去斩首的地方")
             showMultipleMarkersAndMoveCamera(listOf(place1, place2, place3))
         }
 
@@ -92,33 +98,17 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
+        googleMap.setInfoWindowAdapter(CustomInfoWindowAdapter(layoutInflater, markerSet))
     }
 
-    private fun showMarkerOnMap(marker: MapMarker) {
-        marker.title?.let {
-            val customMarkerView = bindCustomMarkerInfo(marker.title, marker.description)
-            val iconBitMap = makeIconBitmap(customMarkerView)
-            addMarker(marker.location, iconBitMap)
-        }
+    private fun showCustomLayoutMarkerOnMap(marker: CustomLayoutMarker) {
+        val customLayoutMarkerView = bindCustomLayoutMarkerInfo(marker.title, marker.description)
+        val iconBitMap = makeIconBitmap(customLayoutMarkerView)
+        addCustomLayoutMarker(marker.location, iconBitMap)
+    }
 
-        googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
-            override fun getInfoWindow(p0: Marker): View {
-                // in here it will using the entire info window including frame
-                val view: View = layoutInflater.inflate(R.layout.google_map_custom_infowindow, null)
-                val titleView = view.findViewById<View>(R.id.infowindow_title) as TextView
-                val descriptionView =
-                    view.findViewById<View>(R.id.infowindow_description) as TextView
-                titleView.text = marker.title
-                descriptionView.text = marker.description
-                return view
-            }
-
-            override fun getInfoContents(p0: Marker): View? {
-                // in here it will show custom content but using default info window frame and background
-                return null
-            }
-
-        })
+    private fun showInfoWindowMarkerOnMap(marker: CustomInfoWindowMarker) {
+        addCustomInfoWindowMarker(marker)?.also { markerSet.add(it) }
     }
 
     private fun moveCameraToMarker(marker: MapMarker, zoomLevel: Float = 12.0f) {
@@ -128,7 +118,10 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun showMultipleMarkersAndMoveCamera(markers: List<MapMarker>) {
         val builder = LatLngBounds.Builder()
         for (marker in markers) {
-            showMarkerOnMap(marker)
+            when (marker) {
+                is CustomLayoutMarker -> showCustomLayoutMarkerOnMap(marker)
+                is CustomInfoWindowMarker -> showInfoWindowMarkerOnMap(marker)
+            }
             val markerNorthEastBorder = marker.location.let {
                 SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_NORTH)
                 SphericalUtil.computeOffset(it, MARKER_OFFSET_IN_METERS, HEADING_EAST)
@@ -143,12 +136,17 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0))
     }
 
-    private fun bindCustomMarkerInfo(title: String, description: String?): View {
-        val customMarkerView = layoutInflater.inflate(R.layout.google_map_custom_marker, null)
-        customMarkerView.findViewById<TextView>(R.id.custom_marker_title)?.apply { text = title }
-        customMarkerView.findViewById<TextView>(R.id.customer_marker_description)
-            ?.apply { description?.let { text = it } }
-        return customMarkerView
+    private fun bindCustomLayoutMarkerInfo(title: String, description: String?): View {
+        val customLayoutMarkerView = layoutInflater.inflate(R.layout.google_map_custom_marker, null)
+        customLayoutMarkerView.findViewById<TextView>(R.id.custom_marker_title)
+            ?.apply { text = title }
+        customLayoutMarkerView.findViewById<TextView>(R.id.custom_marker_description)?.apply {
+            description?.let {
+                text = it
+                this.visibility = VISIBLE
+            }
+        }
+        return customLayoutMarkerView
     }
 
     private fun makeIconBitmap(markerView: View): Bitmap {
@@ -158,13 +156,21 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
         return iconGenerator.makeIcon()
     }
 
-    private fun addMarker(location: LatLng, icon: Bitmap) {
+    private fun addCustomLayoutMarker(location: LatLng, icon: Bitmap) {
         googleMap.addMarker(
             MarkerOptions()
                 .position(location)
                 .anchor(0.0f, 1.0f)
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         )
+    }
+
+    private fun addCustomInfoWindowMarker(marker: CustomInfoWindowMarker): Marker? {
+        val markerOptions = MarkerOptions().position(marker.location).title(marker.infoWindowTitle)
+        marker.infoWindowDescription?.also {
+            markerOptions.snippet(it)
+        }
+        return googleMap.addMarker(markerOptions)
     }
 
     companion object {
