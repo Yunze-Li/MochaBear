@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import com.arctos.mochabear.R
 import com.arctos.mochabear.mapdemo.model.CustomInfoWindowMarker
 import com.arctos.mochabear.mapdemo.model.CustomLayoutMarker
@@ -28,7 +28,7 @@ import com.google.maps.android.ui.IconGenerator
 
 class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private lateinit var googleMap: GoogleMap
 
     private val markerSet = mutableSetOf<Marker>()
@@ -77,7 +77,7 @@ class GoogleMapDemoActivity : AppCompatActivity(), OnMapReadyCallback {
             showMultipleMarkersAndMoveCamera(listOf(place1, place2, place3))
         }
 
-        val bottomSheet = findViewById<ConstraintLayout>(R.id.google_map_bottom_sheet)
+        val bottomSheet = findViewById<CardView>(R.id.google_map_bottom_sheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
