@@ -15,7 +15,7 @@ package com.arctos.mochabear.leetcode.medium
  * update()方法 时间O(logN)
  * sumRange()方法 时间O(logN)
  */
-class NumArray(nums: IntArray) {
+class RangeSumQuery(nums: IntArray) {
 
     private var numbers = nums
     private var tree = IntArray(numbers.size + 1)
