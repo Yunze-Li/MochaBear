@@ -71,7 +71,41 @@ val nums = arrayListOf(1, 2, 3)
 val nums = mutableListOf<Int>()
 
 // initialize with fixed size and default value
-val nums = MutableList(nums.size){ 0 }
+val nums = MutableList(nums.size) { 0 }
+```
+
+### Replace Char in String by index
+
+**Java**
+
+```java
+// using substring() method
+String newString = oldString.substring(0, index) + newChar + oldString.substring(index + 1);
+
+// using StringBuilder class
+StringBuilder builder = new StringBuilder(oldString);
+builder.setCharAt(index, newChar);
+String newString = builder.toString();
+
+// using char array
+char[] chars = oldString.toCharArray();
+chars[index] = newChar;
+String newString = new String(chars);
+```
+
+**Kotlin**
+
+```kotlin
+// using substring() method
+val newString = oldString.substring(0, index) + newChar + oldString.substring(index + 1)
+
+// using StringBuilder class
+val newString = StringBuilder(oldString).also { it.setCharAt(index, newChar) }
+
+// using char array
+val chars = oldString.toCharArray()
+chars[index] = newChar
+val newString = String(chars)
 ```
 
 
