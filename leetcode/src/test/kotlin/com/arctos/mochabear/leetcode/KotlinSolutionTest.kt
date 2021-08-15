@@ -6,8 +6,6 @@ class KotlinSolutionTest {
 
     @Test
     fun test() {
-        val solution = KotlinSolution()
-
-
+        KotlinSolution()
     }
 }
