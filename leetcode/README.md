@@ -26,10 +26,13 @@ Binary Indexed Tree (Fenwick Tree)
 
 ```java
 // initialize with fix length (fill with default value)
-int[][]nums=new int[3][3];
+int[]nums=new int[3];
 
 // initialize with content
-int[][]nums={{1,2},{2,3},{3,4},{1,4},{1,5}};
+        int[][]nums={{1,2},{2,3},{3,4},{1,4},{1,5}};
+
+// initialize 2-D arrays
+        int[][]nums=new int[3][3];
 ```
 
 **Kotlin**
@@ -44,6 +47,9 @@ val nums = arrayOf(1, 2, 3)
 // initialize with primitive value
 val nums = intarrayof(1, 2, 3)
 val hasValues = booleanArrayOf(true, true, false)
+
+// initialize 2-D arrays
+val arr = Array(rows) { IntArray(cols) }
 ```
 
 ### Initialize arrayList
@@ -107,5 +113,6 @@ val chars = oldString.toCharArray()
 chars[index] = newChar
 val newString = String(chars)
 ```
+
 
 

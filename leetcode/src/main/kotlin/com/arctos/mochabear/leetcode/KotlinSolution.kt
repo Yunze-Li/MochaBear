@@ -1,25 +1,28 @@
 package com.arctos.mochabear.leetcode
 
-import java.util.Stack
+import kotlin.math.min
+
 
 class Solution {
-    fun validateStackSequences(pushed: IntArray, popped: IntArray): Boolean {
-        if (pushed.isEmpty() && popped.isEmpty()) {
-            return true
-        } else if (pushed.isEmpty() || popped.isEmpty() || pushed.size != popped.size) {
-            return false
-        }
+    fun minPathSum(grid: Array<IntArray>): Int {
+        val row = grid.size
+        val column = grid[0].size
 
-        val stack = Stack<Int>()
-        var poppedIndex = 0
-        for (pushedIndex in pushed.indices) {
-            stack.push(pushed[pushedIndex])
-            while (stack.isNotEmpty() && stack.peek() == popped[poppedIndex]) {
-                stack.pop()
-                poppedIndex++
+        for (rowIndex in 1 until row) {
+            grid[rowIndex][0] += grid[rowIndex - 1][0]
+        }
+        for (columnIndex in 1 until row) {
+            grid[0][columnIndex] += grid[0][columnIndex - 1]
+        }
+        for (rowIndex in 1 until row) {
+            for (columnIndex in 1 until column) {
+                grid[rowIndex][columnIndex] += min(
+                    grid[rowIndex - 1][columnIndex],
+                    grid[rowIndex][columnIndex - 1]
+                )
             }
         }
-        return stack.isEmpty()
+        return grid[row - 1][column - 1]
     }
 }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.arctos.mochabear">
 
     <application
@@ -11,20 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MochaBear">
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <!--    The API key for Google Maps-based APIs.-->
-        <!--        <meta-data-->
-        <!--            android:name="com.google.android.geo.API_KEY"-->
-        <!--            android:value="${GOOGLE_MAPS_API_KEY}" />-->
-
-        <!--  Activities  -->
         <activity
-            android:name=".main.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,21 +20,26 @@
         </activity>
 
         <activity
-            android:name=".main.HandlerActivity"
-            android:parentActivityName=".main.HandlerActivity" />
+            android:name=".activitydemo.ActivityDemoActivity"
+            android:parentActivityName=".MainActivity" />
 
         <activity
-            android:exported="false"
-            android:name=".mapdemo.GoogleMapDemoActivity"
-            android:label="@string/google_map_demo_name"
-            android:parentActivityName=".main.MainActivity"
-            tools:ignore="AppLinkUrlError">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="https" />
-            </intent-filter>
-        </activity>
+            android:name=".servicedemo.ServiceDemoActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".activitydemo.NormalActivity"
+            android:parentActivityName=".activitydemo.ActivityDemoActivity" />
+
+        <activity
+            android:name=".activitydemo.DialogActivity"
+            android:parentActivityName=".activitydemo.ActivityDemoActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
+        <service
+            android:name=".servicedemo.DemoService"
+            android:enabled="true"
+            android:exported="true" />
 
     </application>
 

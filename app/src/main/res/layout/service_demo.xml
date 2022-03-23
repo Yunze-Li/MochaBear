@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/service_demo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/service_demo_title"
+            style="@style/DemoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Welcome to Service Demo" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_service_button"
+            style="@style/DemoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Start Service" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stop_service_button"
+            style="@style/DemoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Stop Service" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bind_service_button"
+            style="@style/DemoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Bind Service" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/unbind_service_button"
+            style="@style/DemoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Unbind Service" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
