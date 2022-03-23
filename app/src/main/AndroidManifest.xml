@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.arctos.mochabear">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,10 +26,6 @@
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".servicedemo.ServiceDemoActivity"
-            android:parentActivityName=".MainActivity" />
-
-        <activity
             android:name=".activitydemo.NormalActivity"
             android:parentActivityName=".activitydemo.ActivityDemoActivity" />
 
@@ -35,6 +33,10 @@
             android:name=".activitydemo.DialogActivity"
             android:parentActivityName=".activitydemo.ActivityDemoActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
+
+        <activity
+            android:name=".servicedemo.ServiceDemoActivity"
+            android:parentActivityName=".MainActivity" />
 
         <service
             android:name=".servicedemo.DemoService"

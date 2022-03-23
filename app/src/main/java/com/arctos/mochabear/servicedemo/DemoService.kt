@@ -23,4 +23,19 @@ class DemoService : Service() {
     override fun onBind(intent: Intent?): IBinder? {
         return mBinder
     }
+
+    override fun onCreate() {
+        super.onCreate()
+        Log.d("DemoService", "DemoService onCreate()")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d("DemoService", "DemoService onStartCommand()")
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("DemoService", "DemoService onDestroy()")
+    }
 }
