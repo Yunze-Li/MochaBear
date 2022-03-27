@@ -29,6 +29,14 @@ class ActivityDemoActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // launch Dialog Activity
+        val leakCanaryActivityButton =
+            findViewById<AppCompatButton>(R.id.leak_canary_activity_button)
+        leakCanaryActivityButton.setOnClickListener {
+            val intent = Intent(this, LeakingActivity::class.java)
+            startActivity(intent)
+        }
+
         Log.d(TAG, "$TAG onCreate()")
     }
 

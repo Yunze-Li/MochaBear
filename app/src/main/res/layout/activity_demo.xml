@@ -37,6 +37,15 @@
             android:layout_marginVertical="10dp"
             android:text="Dialog Activity" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/leak_canary_activity_button"
+            style="@style/DemoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Trigger Leak Canary" />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -11,20 +11,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MochaBear">
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Activity Demo -->
         <activity
             android:name=".activitydemo.ActivityDemoActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".activitydemo.NormalActivity"
             android:parentActivityName=".activitydemo.ActivityDemoActivity" />
@@ -35,6 +35,12 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity
+            android:name=".activitydemo.LeakingActivity"
+            android:exported="false"
+            android:parentActivityName=".activitydemo.ActivityDemoActivity" />
+
+        <!-- Service Demo -->
+        <activity
             android:name=".servicedemo.ServiceDemoActivity"
             android:parentActivityName=".MainActivity" />
 
@@ -42,7 +48,6 @@
             android:name=".servicedemo.DemoService"
             android:enabled="true"
             android:exported="true" />
-
     </application>
 
 </manifest>

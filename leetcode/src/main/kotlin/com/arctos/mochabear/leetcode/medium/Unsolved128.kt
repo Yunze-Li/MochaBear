@@ -5,6 +5,6 @@ package com.arctos.mochabear.leetcode.medium
  */
 class Unsolved128 {
     fun longestConsecutive(nums: IntArray): Int {
-
+        return 0
     }
 }
