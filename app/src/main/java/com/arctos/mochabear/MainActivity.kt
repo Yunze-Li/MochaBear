@@ -8,13 +8,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.arctos.mochabear.activitydemo.ActivityDemoActivity
+import com.arctos.mochabear.animationdemo.AnimationDemoActivity
 import com.arctos.mochabear.servicedemo.ServiceDemoActivity
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.activity_main)
 
         // Activity Demo
         val activityDemoButton = findViewById<AppCompatButton>(R.id.activity_demo_button)
@@ -27,6 +28,13 @@ class MainActivity : AppCompatActivity() {
         val serviceDemoButton = findViewById<AppCompatButton>(R.id.service_demo_button)
         serviceDemoButton.setOnClickListener {
             val intent = Intent(this, ServiceDemoActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Animation Demo
+        val animationDemoButton = findViewById<AppCompatButton>(R.id.animation_demo_button)
+        animationDemoButton.setOnClickListener {
+            val intent = Intent(this, AnimationDemoActivity::class.java)
             startActivity(intent)
         }
     }

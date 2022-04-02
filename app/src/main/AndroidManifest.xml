@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MochaBear">
         <activity
+            android:name=".animationdemo.AnimationDemoActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -19,27 +22,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Activity Demo -->
+        </activity> <!-- Activity Demo -->
         <activity
             android:name=".activitydemo.ActivityDemoActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".activitydemo.NormalActivity"
             android:parentActivityName=".activitydemo.ActivityDemoActivity" />
-
         <activity
             android:name=".activitydemo.DialogActivity"
             android:parentActivityName=".activitydemo.ActivityDemoActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-
         <activity
             android:name=".activitydemo.LeakingActivity"
             android:exported="false"
-            android:parentActivityName=".activitydemo.ActivityDemoActivity" />
-
-        <!-- Service Demo -->
+            android:parentActivityName=".activitydemo.ActivityDemoActivity" /> <!-- Service Demo -->
         <activity
             android:name=".servicedemo.ServiceDemoActivity"
             android:parentActivityName=".MainActivity" />
