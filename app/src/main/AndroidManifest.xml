@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MochaBear">
         <activity
+            android:name=".viewmodeldemo.ViewModelDemoActivity"
+            android:exported="false" />
+        <activity
             android:name=".animationdemo.AnimationDemoActivity"
             android:exported="false" />
         <activity
