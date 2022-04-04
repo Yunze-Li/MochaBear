@@ -7,9 +7,9 @@ package com.arctos.mochabear.leetcode.medium
 class LRUCache(capacity: Int) {
 
     private val capacity = capacity
-    private val nodeMap = mutableMapOf<Int, ListNode>()
-    private val head = ListNode()
-    private val tail = ListNode()
+    private val nodeMap = mutableMapOf<Int, CacheNode>()
+    private val head = CacheNode()
+    private val tail = CacheNode()
 
     init {
         head.next = tail
@@ -43,18 +43,18 @@ class LRUCache(capacity: Int) {
             removeNode(target)
 
             // add new node to first position and update node map
-            val newNode = ListNode(key, value)
+            val newNode = CacheNode(key, value)
             nodeMap[key] = newNode
             insertNodeToFirst(newNode)
         } else {
             // add new node to first position and update node map
-            val newNode = ListNode(key, value)
+            val newNode = CacheNode(key, value)
             nodeMap[key] = newNode
             insertNodeToFirst(newNode)
         }
     }
 
-    private fun insertNodeToFirst(node: ListNode) {
+    private fun insertNodeToFirst(node: CacheNode) {
         val temp = head.next!!
         head.next = node
         node.next = temp
@@ -62,7 +62,7 @@ class LRUCache(capacity: Int) {
         node.previous = head
     }
 
-    private fun removeNode(node: ListNode) {
+    private fun removeNode(node: CacheNode) {
         val before = node.previous!!
         val after = node.next!!
         node.previous = null
@@ -71,11 +71,11 @@ class LRUCache(capacity: Int) {
         after.previous = before
     }
 
-    class ListNode constructor(
+    class CacheNode constructor(
         var key: Int? = null,
         var value: Int? = null,
-        var previous: ListNode? = null,
-        var next: ListNode? = null
+        var previous: CacheNode? = null,
+        var next: CacheNode? = null
     )
 
 }
