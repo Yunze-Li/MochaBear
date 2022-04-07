@@ -1,6 +1,7 @@
 package com.arctos.mochabear.activitydemo
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -67,6 +68,26 @@ class ActivityDemoActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        Log.d(TAG, "$TAG onRestart())")
+        Log.d(TAG, "$TAG onRestart()")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d(TAG, "$TAG onNewIntent()")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "$TAG onSaveInstanceState() outState: $outState)")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d(TAG, "$TAG onRestoreInstanceState(), savedInstanceState: $savedInstanceState")
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d(TAG, "$TAG onConfigurationChanged() newConfig: $newConfig")
     }
 }
