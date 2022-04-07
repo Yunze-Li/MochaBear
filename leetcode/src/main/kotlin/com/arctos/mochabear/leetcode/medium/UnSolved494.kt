@@ -36,8 +36,3 @@ class UnSolved494 {
         return dp[side - 1][sum + target]
     }
 }
-
-fun main() {
-    val unSolved494 = UnSolved494()
-    unSolved494.findTargetSumWays(intArrayOf(9, 7, 0, 3, 9, 8, 6, 5, 7, 6), 2)
-}
