@@ -1,10 +1,10 @@
 package com.arctos.mochabear.leetcode
 
-class Solution {
+class KotlinPlayground {
     // write code in here
 
 }
 
 fun main(args: Array<String>) {
-    val solution = Solution()
+    val kotlinPlayground = KotlinPlayground()
 }
